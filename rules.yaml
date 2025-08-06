@@ -1,0 +1,16 @@
+rules:
+  - name: "Too many NSFs in last 90 days"
+    condition: "nsf_count_90d > 5"
+    message: "More than 5 NSF events in the trailing 90 days"
+
+  - name: "Low average daily balance"
+    condition: "avg_daily_balance < 1000"
+    message: "Average daily balance under $1,000"
+
+  - name: "Weak inflow/outflow coverage"
+    condition: "inflow_outflow_ratio < 0.75"
+    message: "Inflows cover less than 0.75× of outflows"
+
+  - name: "High volatility"
+    condition: "volatility_std > 5000"
+    message: "Very spiky daily cash movement"
