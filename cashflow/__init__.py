@@ -193,7 +193,6 @@ def evaluate_rules(metrics: Dict[str, Any], rules_yaml_path: Optional[str]) -> L
         results.append(RuleResult(name=name, condition=cond, passed=bool(hit), message=msg))
     return results
 
-
 def render_markdown(metrics: Dict[str, Any], flags: List[RuleResult] | None = None) -> str:
     flags = flags or []
     lines = ["# Cash-Flow KPIs", ""]
@@ -208,7 +207,8 @@ def render_markdown(metrics: Dict[str, Any], flags: List[RuleResult] | None = No
     lines.append(f"- Volatility (std of daily net): **${metrics.get('volatility_std'):,}**")
     trend = metrics.get("rolling_90_day_trend", {})
     lines.append(
-        f"- 90d net inflow: **${trend.get('last_90d_net_inflow', 0):,}** (prev **${trend.get('prev_90d_net_inflow', 0):,}**, Δ {trend.get('pct_change', 0)*100:.1f}%)"
+        f"- 90d net inflow: **${trend.get('last_90d_net_inflow', 0):,}** "
+        f"(prev **${trend.get('prev_90d_net_inflow', 0):,}**, Δ {trend.get('pct_change', 0)*100:.1f}%)"
     )
     lines.append(f"- Seasonality: _{metrics.get('seasonality_hint')}_")
     lines.append("")
@@ -232,28 +232,28 @@ def render_markdown(metrics: Dict[str, Any], flags: List[RuleResult] | None = No
 
     lines.append("")
     lines.append(f"_Generated at {metrics.get('generated_at')}_")
-    return "
-".join(lines)
+    return "\n".join(lines)
 
 
 def render_html(markdown_text: str) -> str:
     import html
-    body = "<br/>".join(html.escape(line) for line in markdown_text.split("
-"))
-    return f"""<!doctype html>
-<html lang="en">
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Cash-Flow KPIs</title>
-<style>
-  body {{ font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 2rem; line-height: 1.45; }}
-  table {{ border-collapse: collapse; }}
-  th, td {{ border: 1px solid #ddd; padding: 6px 10px; }}
-  th {{ background: #f6f8fa; }}
-  code {{ background: #f6f8fa; padding: 2px 4px; border-radius: 4px; }}
-</style>
-<body>
-{body}
-</body>
-</html>
-"""
+    body = "<br/>".join(html.escape(line) for line in markdown_text.split("\n"))
+    template = (
+        "<!doctype html>\n"
+        '<html lang="en">\n'
+        '<meta charset="utf-8" />\n'
+        '<meta name="viewport" content="width=device-width, initial-scale=1" />\n'
+        "<title>Cash-Flow KPIs</title>\n"
+        "<style>\n"
+        "  body {{ font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 2rem; line-height: 1.45; }}\n"
+        "  table {{ border-collapse: collapse; }}\n"
+        "  th, td {{ border: 1px solid #ddd; padding: 6px 10px; }}\n"
+        "  th {{ background: #f6f8fa; }}\n"
+        "  code {{ background: #f6f8fa; padding: 2px 4px; border-radius: 4px; }}\n"
+        "</style>\n"
+        "<body>\n"
+        "{body}\n"
+        "</body>\n"
+        "</html>\n"
+    )
+    return template.format(body=body)

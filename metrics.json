@@ -1,0 +1,53 @@
+{
+  "metrics": {
+    "as_of": "2025-04-04",
+    "generated_at": "2025-08-06T21:52:40.150496Z",
+    "period": {
+      "start": "2025-02-01",
+      "end": "2025-04-04"
+    },
+    "days_covered": 63,
+    "monthly_gross_revenue": {
+      "2025-02": 4100.0,
+      "2025-03": 11100.0,
+      "2025-04": 800.0
+    },
+    "avg_daily_balance": -992.06,
+    "nsf_count": 20,
+    "nsf_count_90d": 20,
+    "inflow_outflow_ratio": 0.9552,
+    "volatility_std": 678.74,
+    "rolling_90_day_trend": {
+      "last_90d_net_inflow": -750.0,
+      "prev_90d_net_inflow": 0.0,
+      "pct_change": -750.0
+    },
+    "seasonality_hint": "high variability; spikes in: 2025-03"
+  },
+  "flags": [
+    {
+      "name": "Too many NSFs in last 90 days",
+      "condition": "nsf_count_90d > 5",
+      "passed": true,
+      "message": "More than 5 NSF events in the trailing 90 days"
+    },
+    {
+      "name": "Low average daily balance",
+      "condition": "avg_daily_balance < 1000",
+      "passed": true,
+      "message": "Average daily balance under $1,000"
+    },
+    {
+      "name": "Weak inflow/outflow coverage",
+      "condition": "inflow_outflow_ratio < 0.75",
+      "passed": false,
+      "message": "Inflows cover less than 0.75\u00d7 of outflows"
+    },
+    {
+      "name": "High volatility",
+      "condition": "volatility_std > 5000",
+      "passed": false,
+      "message": "Very spiky daily cash movement"
+    }
+  ]
+}
